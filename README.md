@@ -8,3 +8,4 @@ This is the Apriori implemented in a Python notebook since a lot (maybe most) of
 
 ## cxx/
 This is where the C/C++ implementation will go. It is no secret that C/C++ does run faster and more efficient than Python.
+Using ```crow``` namespace.
