@@ -18,7 +18,7 @@ namespace crow
         Transactions(const std::set<std::string>&);
         ~Transactions();
         void push_transaction(const std::vector<std::string>&);
-        std::size_t count(); // returns the number of transaction in obj
+        std::size_t size(); // returns the number of transaction in obj
     };
     
     Transactions::Transactions(const std::set<std::string>& items)
@@ -35,7 +35,7 @@ namespace crow
         transactions.push_back(transaction);
     }
 
-    std::size_t Transactions::count()
+    std::size_t Transactions::size()
     {
         return(transactions.size());
     }
