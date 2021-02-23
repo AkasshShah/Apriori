@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <set>
+#include <map>
 
 namespace crow
 {
@@ -12,6 +13,7 @@ namespace crow
     private:
         const std::set<std::string>& items;
         std::vector<std::vector<std::string>> transactions;
+        std::map<std::array<std::set<std::string>, 2>, std::array<int, 2>> rules;
     public:
         Transactions(const std::set<std::string>&);
         ~Transactions();
