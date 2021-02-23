@@ -13,6 +13,12 @@ namespace crow
     private:
         const std::set<std::string>& items;
         std::vector<std::vector<std::string>> transactions;
+        // rules will be stored in a map where the keys will be an array of size 2
+        // where the first element will be a set of the antecedents
+        // and the second element will be a set of the consequents
+        // the key will also be an array of size 2
+        // where the first elemet will be the int support
+        // and the second element will be the int confidence
         std::map<std::array<std::set<std::string>, 2>, std::array<int, 2>> rules;
     public:
         Transactions(const std::set<std::string>&);
