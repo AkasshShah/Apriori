@@ -2,10 +2,12 @@
 #include <fstream> // std::ifstream
 #include <iomanip> // std::setw
 #include <string> // std::string
-#include <array> //std::array
+#include <array> // std::array
+#include <set> // std::set
 
 #include "include/nlohmann/json.hpp"
 #include "Apriori.hpp"
+#include "Transactions.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -21,13 +23,13 @@ int main(int argc, char* argv[])
     };
 
     // make nlohmann::json objects
-    nlohmann::json items;
+    nlohmann::json itemsjson;
     std::array<nlohmann::json, NUM_DBS> dbs_transaction;
 
     // first load json data into nlohmann::json objects
     std::ifstream ifs;
     ifs.open(file_items);
-    ifs >> items;
+    ifs >> itemsjson;
     if(ifs.is_open()) ifs.close();
     
     for(int i = 0; i < NUM_DBS; i++)
@@ -41,7 +43,40 @@ int main(int argc, char* argv[])
 
     // std::cout << std::setw(4) << dbs_transaction[0] << std::endl; // test
 
-    
+    // make set of all the items
+    std::set<std::string> items;
+    for(std::string item : itemsjson)
+    {
+        items.insert(item);
+    }
+
+    // test print
+    // for(std::string item : items)
+    // {
+    //     std::cout << item << std::endl;
+    // }
+    // std::cout << items.count("some item") << std::endl;
+
+    // iterate through each database and generate Transactions and perform Apriori on those transactions
+    for(int i = 0; i < NUM_DBS; i++)
+    {
+        // generate Transactions obj
+        crow::Transactions dbt(items);
+        
+
+        for(int j = 0; j < dbs_transaction[i].size(); j++)
+        {
+            std::vector<std::string> transaction;
+            for(int k = 0; k < dbs_transaction[i][j].size(); k++)
+            {
+                transaction.push_back(dbs_transaction[i][j][k]);
+            }
+            dbt.push_transaction(transaction);
+        }
+        // std::cout << "DB " << i + 1 << " has " << dbt.count() << " transactions\n";
+
+        
+    }
 
     return(1);
 }
