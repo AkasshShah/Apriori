@@ -6,8 +6,8 @@
 #include <set> // std::set
 
 #include "include/nlohmann/json.hpp"
-#include "Apriori.hpp"
 #include "Transactions.hpp"
+#include "Apriori.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -49,6 +49,18 @@ int main(int argc, char* argv[])
     {
         items.insert(item);
     }
+
+    // get minimum support and minimum confidence
+    double minimum_support = 0.0;
+    double minimum_confidence = 0.0;
+
+    std::cout << "Enter minimum support (out of 100): ";
+    std::cin >> minimum_support;
+    std::cout << "Enter minimum confidence (out of 100): ";
+    std::cin >> minimum_confidence;
+    minimum_support /= 100.0;
+    minimum_confidence /= 100.0;
+
 
     // test print
     // for(std::string item : items)
