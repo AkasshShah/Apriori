@@ -54,6 +54,8 @@ int main(int argc, char* argv[])
     double minimum_support = 0.0;
     double minimum_confidence = 0.0;
 
+    // get minimum support & confidence via std in
+    // can also get them via cli inputs via argv
     std::cout << "Enter minimum support (out of 100): ";
     std::cin >> minimum_support;
     std::cout << "Enter minimum confidence (out of 100): ";
@@ -69,13 +71,14 @@ int main(int argc, char* argv[])
     // }
     // std::cout << items.count("some item") << std::endl;
 
+    std::array<double, 2> supp_and_conf = {minimum_support, minimum_confidence};
+
     // iterate through each database and generate Transactions and perform Apriori on those transactions
     for(int i = 0; i < NUM_DBS; i++)
     {
         // generate Transactions obj
-        crow::Transactions dbt(items);
+        crow::Transactions dbt(items, i+1, supp_and_conf);
         
-
         for(int j = 0; j < dbs_transaction[i].size(); j++)
         {
             std::vector<std::string> transaction;
@@ -87,7 +90,11 @@ int main(int argc, char* argv[])
         }
         // std::cout << "DB " << i + 1 << " has " << dbt.count() << " transactions\n";
 
-        
+        // done setting up db
+        // now call apriori and output in standard out or file or both
+
+        // crow::Apriori(dbt, minimum_support, minimum_confidence);
+        std::cout << dbt << std::endl;
     }
 
     return(1);
