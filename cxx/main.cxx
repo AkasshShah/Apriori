@@ -79,12 +79,12 @@ int main(int argc, char* argv[])
         // generate Transactions obj
         crow::Transactions dbt(items, i+1, supp_and_conf);
         
-        for(int j = 0; j < dbs_transaction[i].size(); j++)
+        for(int d = 0; d < dbs_transaction[i].size(); d++)
         {
             std::vector<std::string> transaction;
-            for(int k = 0; k < dbs_transaction[i][j].size(); k++)
+            for(int k = 0; k < dbs_transaction[i][d].size(); k++)
             {
-                transaction.push_back(dbs_transaction[i][j][k]);
+                transaction.push_back(dbs_transaction[i][d][k]);
             }
             dbt.push_transaction(transaction);
         }
