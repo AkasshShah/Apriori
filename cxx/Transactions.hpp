@@ -65,7 +65,8 @@ namespace crow
 
     std::ostream& operator<<(std::ostream& os, const Transactions& db)
     {
-        os << "---------------------------------\n";
+        std::string line_break = "---------------------------------";
+        os << line_break << std::endl;
         os << "Apriori on DB with id" << db.transactions_id << std::endl;
         os << "Items in DB:\n[\n";
         for(std::string item : db.items)
@@ -113,7 +114,7 @@ namespace crow
                 os << ") : " << support << ", " << confidence << std::endl;
             }
         }
-        os << "---------------------------------";
+        os << line_break;
         return(os);
     }
     
