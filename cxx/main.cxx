@@ -93,7 +93,9 @@ int main(int argc, char* argv[])
         // done setting up db
         // now call apriori and output in standard out or file or both
 
-        // crow::Apriori(dbt, minimum_support, minimum_confidence);
+        // crow::Apriori(dbt);
+
+        // output information into file or standard output
         std::cout << dbt << std::endl;
     }
 

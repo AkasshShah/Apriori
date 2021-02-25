@@ -29,6 +29,10 @@ namespace crow
         ~Transactions();
         void push_transaction(const std::vector<std::string>&);
         std::size_t size(); // returns the number of transaction in obj
+        double get_minimum_support();
+        void set_minimum_support(double);
+        double get_minimum_confidence();
+        void set_minimum_confidence(double);
         friend std::ostream& operator<<(std::ostream&, const Transactions&);
     };
     
@@ -54,6 +58,11 @@ namespace crow
         return(transactions.size());
     }
 
+    double Transactions::get_minimum_support() {return(minimum_support);}
+    void Transactions::set_minimum_support(double supp) {minimum_support = supp;}
+    double Transactions::get_minimum_confidence() {return(minimum_confidence);}
+    void Transactions::set_minimum_confidence(double conf) {minimum_confidence = conf;}
+
     std::ostream& operator<<(std::ostream& os, const Transactions& db)
     {
         os << "---------------------------------\n";
@@ -70,7 +79,7 @@ namespace crow
             for(int i = 0; i < transaction.size(); i++)
             {
                 os << transaction[i];
-                if(i >= transaction.size() - 1)
+                if(i <= transaction.size() - 1)
                 {
                     os << "; ";
                 }
