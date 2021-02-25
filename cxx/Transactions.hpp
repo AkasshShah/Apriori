@@ -21,9 +21,9 @@ namespace crow
         // where the first element will be a set of the antecedents
         // and the second element will be a set of the consequents
         // the key will also be an array of size 2
-        // where the first elemet will be the int support
-        // and the second element will be the int confidence
-        std::map<std::array<std::set<std::string>, 2>, std::array<int, 2>> rules;
+        // where the first elemet will be the double support
+        // and the second element will be the double confidence
+        std::map<std::array<std::set<std::string>, 2>, std::array<double, 2>> rules;
     public:
         Transactions(const std::set<std::string>&, int, std::array<double, 2>);
         ~Transactions();
