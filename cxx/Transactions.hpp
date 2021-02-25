@@ -95,13 +95,6 @@ namespace crow
             os << "Format for the rules printing: (antecedents) -> (consequents) : support, confidence\n";
             for(auto it = db.rules.begin(); it != db.rules.end(); it++)
             {
-                // auto lhs = it->first;
-                // auto rhs = it->second;
-                // auto antecedents = lhs[0];
-                // auto consequents = lhs[1];
-                // auto support = rhs[0];
-                // auto confidence = rhs[1];
-
                 auto antecedents = it->first[0];
                 auto consequents = it->first[1];
                 auto support = it->second[0];
