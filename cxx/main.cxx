@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
     // }
     // std::cout << items.count("some item") << std::endl;
 
-    std::array<double, 2> supp_and_conf = {minimum_support, minimum_confidence};
+    std::array<double, 2> supp_and_conf{minimum_support, minimum_confidence};
 
     // iterate through each database and generate Transactions and perform Apriori on those transactions
     for(int i = 0; i < NUM_DBS; i++)
@@ -81,15 +81,13 @@ int main(int argc, char* argv[])
         
         for(int d = 0; d < dbs_transaction[i].size(); d++)
         {
-            std::vector<std::string> transaction;
+            std::set<std::string> transaction;
             for(int k = 0; k < dbs_transaction[i][d].size(); k++)
             {
-                transaction.push_back(dbs_transaction[i][d][k]);
+                transaction.insert((std::string)dbs_transaction[i][d][k]);
             }
             dbt.push_transaction(transaction);
         }
-        // std::cout << "DB " << i + 1 << " has " << dbt.count() << " transactions\n";
-
         // done setting up db
         // now call apriori and output in standard out or file or both
 

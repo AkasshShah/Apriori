@@ -5,15 +5,37 @@
 #include <string>
 #include <set>
 #include <map>
+#include <unordered_map>
+#include <unordered_set>
+
+// #include "Apriori.hpp" // bool is_subset(const std::set<std::string>& haystack, const std::set<std::string>& needles)
 
 namespace crow
 {
+    template<typename T>
+    bool is_subset(const std::set<T>& haystack, const std::set<T>& needles)
+    {
+        for(const auto& needle : needles) {if(haystack.find(needle) == haystack.end()) {return(false);}}
+        return(true);
+    }
+
+    template<typename T>
+    std::set<T> make_union(const std::set<T>& a, const std::set<T>& b)
+    {
+        std::set<T> result = a;
+        result.insert(b.begin(), b.end());
+        return result;
+    }
+
     // class Transaction will store all the transactions of a database and all unique items that can/have be/been bought
+    // eventually need to make it template-styled
+    // template<typename T>
     class Transactions
     {
     private:
         const std::set<std::string>& items;
-        std::vector<std::vector<std::string>> transactions;
+        std::vector<std::set<std::string>> transactions;
+        // id of db
         int transactions_id;
         double minimum_support;
         double minimum_confidence;
@@ -24,15 +46,18 @@ namespace crow
         // where the first elemet will be the double support
         // and the second element will be the double confidence
         std::map<std::array<std::set<std::string>, 2>, std::array<double, 2>> rules;
+        std::map<std::set<std::string>, double> known_support_values;
     public:
         Transactions(const std::set<std::string>&, int, std::array<double, 2>);
         ~Transactions();
-        void push_transaction(const std::vector<std::string>&);
+        void push_transaction(const std::set<std::string>&);
         std::size_t size(); // returns the number of transaction in obj
         double get_minimum_support();
         void set_minimum_support(double);
+        double get_support(const std::set<std::string>);
         double get_minimum_confidence();
         void set_minimum_confidence(double);
+        double get_coonfidence(const std::set<std::string> antecedents, std::set<std::string> consequents);
         friend std::ostream& operator<<(std::ostream&, const Transactions&);
     };
     
@@ -48,21 +73,35 @@ namespace crow
     {
     }
 
-    void Transactions::push_transaction(const std::vector<std::string>& transaction)
+    void Transactions::push_transaction(const std::set<std::string>& transaction)
     {
-        transactions.push_back(transaction);
+        this->transactions.push_back(transaction);
     }
 
     std::size_t Transactions::size()
     {
-        return(transactions.size());
+        return(this->transactions.size());
     }
 
-    double Transactions::get_minimum_support() {return(minimum_support);}
-    void Transactions::set_minimum_support(double supp) {minimum_support = supp;}
+    double Transactions::get_minimum_support() {return(this->minimum_support);}
+    void Transactions::set_minimum_support(double supp) {this->minimum_support = supp;}
+    double Transactions::get_support(const std::set<std::string> itemset)
+    {
+        // check if any item in itemset not in this->items
+        for(std::string item : itemset) {if(this->items.find(item) == this->items.end()) {return(0.0);}}
+        int count = 0;
+        for(const auto& transaction : this->transactions)
+        {
+            if(crow::is_subset<std::string>(transaction, itemset)) {count++;}
+        }
+        return((double)count/(double)this->size());
+    }
     double Transactions::get_minimum_confidence() {return(minimum_confidence);}
     void Transactions::set_minimum_confidence(double conf) {minimum_confidence = conf;}
-
+    double Transactions::get_coonfidence(const std::set<std::string> antecedents, std::set<std::string> consequents)
+    {
+        return(this->get_support(crow::make_union<std::string>(antecedents, consequents)) / this->get_support(antecedents));
+    }
     std::ostream& operator<<(std::ostream& os, const Transactions& db)
     {
         std::string line_break = "---------------------------------";
@@ -75,15 +114,17 @@ namespace crow
         }
         os << "]\n\n";
         os << "The DB has the following transactions:\n";
-        for(std::vector<std::string> transaction : db.transactions)
+        for(const auto& transaction : db.transactions)
         {
-            for(int i = 0; i < transaction.size(); i++)
+            // for(int i = 0; i < transaction.size(); i++)
+            for(const auto& it : transaction)
             {
-                os << transaction[i];
-                if(i <= transaction.size() - 1)
-                {
-                    os << "; ";
-                }
+                os << it << "; ";
+                // os << transaction[i];
+                // if(i <= transaction.size() - 1)
+                // {
+                //     os << "; ";
+                // }
             }
             os << std::endl;
         }
