@@ -33,6 +33,9 @@
 *.a
 *.lib
 
+# example code tests
+*.test.cxx
+
 # Executables
 *.exe
 *.out
